@@ -6,12 +6,14 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 
 public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     private ImageButton playPauseButton;
     private boolean isPlaying = false;
+    private SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         playPauseButton = findViewById(R.id.btnPlayPause);
+        seekBar = findViewById(R.id.seekBar);
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         // URL del audio público en Internet
         String audioUrl = "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Jorge_Mario_Zuleta/Fauxette/Jorge_Mario_Zuleta_-_12_-_La_noche_fue_roja.mp3";
-        //
-        https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Comme_Jospin/Faire_de_la_musique/Comme_Jospin_-_01_-_Mourir_sur_ses_pieds.mp3
+
         // Inicializar MediaPlayer
         mediaPlayer = new MediaPlayer();
         try {
@@ -42,28 +44,57 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    // El audio está listo para reproducirse
+                    seekBar.setMax(mediaPlayer.getDuration());
                     playAudio();
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mediaPlayer.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
 
     private void playAudio() {
         if (mediaPlayer != null && !isPlaying) {
-            mediaPlayer.start(); // Iniciar la reproducción del audio
+            mediaPlayer.start();
             isPlaying = true;
-            playPauseButton.setImageResource(R.drawable.ic_pausa); // Cambiar la imagen del botón a pausa
+            playPauseButton.setImageResource(R.drawable.ic_pausa);
+            updateSeekBar();
         }
     }
 
     private void pauseAudio() {
         if (mediaPlayer != null && isPlaying) {
-            mediaPlayer.pause(); // Pausar la reproducción del audio
+            mediaPlayer.pause();
             isPlaying = false;
-            playPauseButton.setImageResource(R.drawable.ic_play); // Cambiar la imagen del botón a reproducir
+            playPauseButton.setImageResource(R.drawable.ic_play);
+        }
+    }
+
+    private void updateSeekBar() {
+        if (mediaPlayer != null && isPlaying) {
+            seekBar.setProgress(mediaPlayer.getCurrentPosition());
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    updateSeekBar();
+                }
+            };
+            seekBar.postDelayed(runnable, 1000);
         }
     }
 
