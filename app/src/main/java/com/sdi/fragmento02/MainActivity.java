@@ -22,18 +22,15 @@ public class MainActivity extends AppCompatActivity {
 
         playPauseButton = findViewById(R.id.btnPlayPause);
         seekBar = findViewById(R.id.seekBar);
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        playPauseButton.setOnClickListener(v-> {
                 if (isPlaying) {
                     pauseAudio();
                 } else {
                     playAudio();
                 }
-            }
         });
 
-        // URL del audio público en Internet
+        // URL del audio
         String audioUrl = "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Jorge_Mario_Zuleta/Fauxette/Jorge_Mario_Zuleta_-_12_-_La_noche_fue_roja.mp3";
 
         // Inicializar MediaPlayer
@@ -41,12 +38,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             mediaPlayer.setDataSource(audioUrl);
             mediaPlayer.prepareAsync(); // Prepara el MediaPlayer de forma asíncrona
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    seekBar.setMax(mediaPlayer.getDuration());
-                    playAudio();
-                }
+            mediaPlayer.setOnPreparedListener(v-> {
+                seekBar.setMax(mediaPlayer.getDuration());
+                playAudio();
             });
         } catch (Exception e) {
             e.printStackTrace();
