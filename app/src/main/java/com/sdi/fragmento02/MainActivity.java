@@ -1,5 +1,7 @@
 package com.sdi.fragmento02;
 
+import static com.sdi.fragmento02.R.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.MediaPlayer;
@@ -10,6 +12,8 @@ import android.widget.SeekBar;
 
 public class MainActivity extends AppCompatActivity {
 
+    //private String URLBase = "http://10.0.2.2:8084";
+    private String URLBase = "http://192.168.1.103:8084/static";
     private MediaPlayer mediaPlayer;
     private ImageButton playPauseButton;
     private boolean isPlaying = false;
@@ -30,14 +34,13 @@ public class MainActivity extends AppCompatActivity {
                 }
         });
 
-        // URL del audio
-        String audioUrl = "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Jorge_Mario_Zuleta/Fauxette/Jorge_Mario_Zuleta_-_12_-_La_noche_fue_roja.mp3";
+        String imageUrl = URLBase+"/tiesto/Tiestokaleidoscope.jpg";
+        String audioUrl = URLBase+"/music/tiesto_short.mp3";
 
-        // Inicializar MediaPlayer
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(audioUrl);
-            mediaPlayer.prepareAsync(); // Prepara el MediaPlayer de forma asíncrona
+            mediaPlayer.prepareAsync();
             mediaPlayer.setOnPreparedListener(v-> {
                 seekBar.setMax(mediaPlayer.getDuration());
                 playAudio();
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mediaPlayer != null) {
-            mediaPlayer.release(); // Liberar recursos del MediaPlayer cuando la actividad se destruye
+            mediaPlayer.release();
         }
     }
 }

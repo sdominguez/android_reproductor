@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Contenedor de la información de la pista -->
     <LinearLayout
         android:id="@+id/trackInfoLayout"
         android:layout_width="match_parent"
@@ -12,7 +11,6 @@
         android:layout_margin="16dp"
         android:orientation="vertical">
 
-        <!-- Título de la pista -->
         <TextView
             android:id="@+id/trackTitle"
             android:layout_width="match_parent"
@@ -21,7 +19,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Artista de la pista -->
         <TextView
             android:id="@+id/trackArtist"
             android:layout_width="match_parent"
@@ -30,7 +27,6 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <!-- Contenedor de los controles de reproducción -->
     <LinearLayout
         android:id="@+id/mediaControlsLayout"
         android:layout_width="match_parent"
